@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para Nicol 💖</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: black;
+    font-family: Arial, sans-serif;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+/* TEXTO */
+.contenido {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: pink;
+    z-index: 2;
+}
+
+.contenido h1 {
+    font-size: 2.5rem;
+    text-shadow: 0 0 25px hotpink;
+}
+
+/* BOTONES */
+button {
+    margin: 10px;
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 30px;
+    background: hotpink;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+/* CORAZONES */
+.corazon {
+    position: absolute;
+    animation: subir 4s linear forwards;
+}
+
+@keyframes subir {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-300px); }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="galaxia"></canvas>
+
+<div class="contenido">
+    <h1>
+        🌌 Nicol, eres la mujer de mi vida 💖<br>
+        Te amo<br><br>
+        ¿Quieres ser mi novia?
+    </h1>
+
+    <button onclick="aceptar()">Sí 💕</button>
+    <button onclick="aceptar()">Sí, obvio que sí 😍</button>
+</div>
+
+<audio id="musica">
+    <source src="perfect.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const canvas = document.getElementById("galaxia");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const estrellas = [];
+const total = 1200;
+const centroX = canvas.width / 2;
+const centroY = canvas.height / 2;
+
+for (let i = 0; i < total; i++) {
+    estrellas.push({
+        x: Math.random() * canvas.width - centroX,
+        y: Math.random() * canvas.height - centroY,
+        z: Math.random() * canvas.width,
+        radio: Math.random() * 2
+    });
+}
+
+function animar() {
+    ctx.fillStyle = "rgba(0,0,0,0.3)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let e of estrellas) {
+        e.z -= 2;
+        if (e.z <= 0) e.z = canvas.width;
+
+        const k = 128 / e.z;
+        const x = e.x * k + centroX;
+        const y = e.y * k + centroY;
+
+        if (x >= 0 && x <= canvas.width && y >= 0 && y <= canvas.height) {
+            const size = (1 - e.z / canvas.width) * 2;
+            ctx.beginPath();
+            ctx.fillStyle = "white";
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    requestAnimationFrame(animar);
+}
+
+animar();
+
+/* ACEPTAR */
+function aceptar() {
+    const musica = document.getElementById("musica");
+    musica.currentTime = 30; // ⏱️ empieza en el segundo 30
+    musica.play();
+    explosion();
+}
+function explosion() {
+    for (let i = 0; i < 60; i++) {
+        const c = document.createElement("div");
+        c.innerHTML = "❤️";
+        c.className = "corazon";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.top = Math.random() * 100 + "vh";
+        c.style.fontSize = Math.random() * 30 + 15 + "px";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4000);
+    }
+}
+</script>
+
+</body>
+</html>
